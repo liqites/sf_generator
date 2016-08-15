@@ -21,18 +21,52 @@
       "派件短信通知(SMS)", "寄方客户备注", "长(cm)", "宽(cm)", "高(cm)",
       "扩展字段1", "扩展字段2", "扩展字段3"
     ];
+
+    Converter.read_file = function (file, callback) {
+      ext = file.name.split('.').pop();
+      if (ext == "xlsx") {
+        console.log("xlsx");
+        var reader = new FileReader();
+        var name = file.name;
+        reader.onload = function (e) {
+          var data = e.target.result;
+          console.log(data);
+          var workbook = XLSX.read(data, { type: 'binary' });
+          console.log(workbook);
+        };
+        reader.readAsBinaryString(file);
+      }
+      
+      if (ext == "csv") {
+        console.log("CSV");
+        Papa.parse(file, {
+          encoding: 'gb18030',
+          complete: function(obj) {
+            Converter.csv_to_sf(obj.data)
+            if (callback != undefined) {
+              callback();
+            }
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      }
+    }
+
+    // xlsx 转化为 xlsx
+    Converter.xlsx_to_sf = function (file) {
+      
+    }
     
-    // 转化为顺丰订单
-    // data_array = [
-    //  [headers],
-    //  [values]
-    // ]
-    Converter.to_sf = function(data_array) {
+    // csv 转化为 xlsx
+    Converter.csv_to_sf = function (data_array) {
+      
       index = 0;
       this.order_list = new Object();
       data_array.forEach(function(cells, i, array) {
         index += 1;
-        if(index > 1) {
+        if(index > 1 && cells.length > 10) {
           order_id = cells[0].trim();
 
           if(Converter.order_list.hasOwnProperty(order_id)) {
@@ -55,7 +89,7 @@
             order.create_time = create_time;
 
             item = new Object();
-            item.name = cells[13].trim();
+            item.name = (cells[13] || "").trim();
             item.count = parseInt(cells[36]);
             order.items = []
             order.items.push(item)
@@ -74,9 +108,7 @@
         if(order.items.length > 1) {
           // Multi
           multi_list.push(order);
-        }
-        
-        if(order.items.length == 1 && order.create_time != undefined ){
+        }else if(order.items.length == 1 && order.create_time != undefined ){
           // Single
           if(single_lists.hasOwnProperty(order.items[0].name)) {
             single_lists[order.items[0].name].push(order);
@@ -84,9 +116,7 @@
             single_lists[order.items[0].name] = [];
             single_lists[order.items[0].name].push(order);
           }
-        }
-        
-        if(order.type == undefined) {
+        } else {
           // Error
           error_list.push(order);
         }
@@ -111,7 +141,7 @@
       Converter.orders_sfrows(error_list, full_list);
       
       // 转化为订单
-      Converter.to_xlsx(full_list);
+      Converter.save_to_xlsx(full_list);
     };
 
     Converter.orders_sfrows = function(orders, push_list) {
@@ -139,13 +169,13 @@
       return str_array.join(" & ");
     }
 
-    Converter.to_xlsx = function (orders) {
+    Converter.save_to_xlsx = function (orders) {
       wb = new Workbook();
       ws = Converter.to_worksheet(orders);
-      wb.SheetNames.push('AA');
-      wb.Sheets['AA'] = ws;
+      wb.SheetNames.push('SF');
+      wb.Sheets['SF'] = ws;
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
-      saveAs(new Blob([Converter.s2ab(wbout)],{type:"application/octet-stream"}), "test.xlsx")
+      saveAs(new Blob([Converter.s2ab(wbout)],{type:"application/octet-stream"}), "顺丰单"+ (new Date()).getTime() +".xlsx")
     }
 
     Converter.s2ab = function (s) {

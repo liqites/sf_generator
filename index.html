@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-dark.css">
     <link rel="stylesheet" href="stylesheets/semantic.css">
-    <script src="http://lib.sinaapp.com/js/jquery/1.10.2/jquery-1.10.2.min.js"></script>
+    <script src="https://lib.sinaapp.com/js/jquery/1.10.2/jquery-1.10.2.min.js"></script>
     <script src="javascripts/respond.js"></script>
     <script src="javascripts/semantic.min.js"></script>
     <script src="javascripts/papaparse.min.js"></script>
-    <script type="text/javascript" src="http://oss.sheetjs.com/js-xlsx/xlsx.core.min.js"></script>
+    <!--<script type="text/javascript" src="https://oss.sheetjs.com/js-xlsx/xlsx.core.min.js"></script>-->
+    <script src="javascripts/xlsx.full.min.js"></script>
     <script src="javascripts/blob.js"></script>
     <script src="javascripts/filesaver.js"></script>
     <script src="javascripts/converter.js"></script>
@@ -27,24 +28,30 @@
   <body>
     <div class="ui top fixed inverted menu">
     </div>
-    <div class="ui container" style="margin-top: 50px">  
+    <div class="ui container" style="margin-top: 50px">
       <h2 class="ui header">
         <img src="images/plugin.png">
         <div class="content" >
-          小工具
+          工具
           <div class="sub header">订单转化</div>
         </div>
       </h2>
       <div class="ui divider"></div>
+      <h3>有赞订单 (转) 顺丰订单</h3>
+      <p>支持csv和xlsx格式</p>
+      <input type="file" style="display:none" id="select-file"></input>
       <div class="ui buttons">
-        <a class="ui primary button" id="select-file-btn">选择</a>
-        <input type="file" style="display:none" id="select-file"></input>
-        <a class="ui green button" id="transfer-sf">转化</a>
+        <a class="ui primary button" id="select-file-btn">
+          选择文件
+        </a>
       </div>
       <div class="ui buttons">
-        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.csv" class="ui button">下载CSV模版</a>
-        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.xls" class="ui button">下载Excel模版</a>
+        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.csv" class="ui button">CSV模版</a>
+        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.xls" class="ui button">Excel模版</a>
       </div>
+      <div class="ui divider"></div>
+      <h3>顺丰订单 (转) 有赞标记发货</h3>
+      <p>未完成</p>
     </div>
   </body>
   
@@ -54,19 +61,22 @@
         $("#select-file").click();
       });
 
-      $("#transfer-sf").on('click', function(e) {
-        file = $("#select-file")[0].files[0];
-        $(this).addClass('loading');
-        Papa.parse(file, {
-          complete: function(obj) {
-            Converter.to_sf(obj.data)
-          },
-          error: function(error) {
-            console.log(error);
-            $(this).removeClass('loading');
-          }
-        });
-        $(this).removeClass('loading');
+      $("#select-file").on('change', function(e) {
+        file = this.files[0];
+        $("#select-file-btn").addClass('loading');
+        Converter.read_file(file, function() {
+          $("#select-file-btn").removeClass('loading');
+        })
+        // Papa.parse(file, {
+        //   complete: function(obj) {
+        //     // Converter.to_sf(obj.data)
+        //     $("#select-file-btn").removeClass('loading');
+        //   },
+        //   error: function(error) {
+        //     console.log(error);
+        //     $("#select-file-btn").removeClass('loading');
+        //   }
+        // });
       });
 
       $("#select-file").on("change", function(e){
