@@ -22,7 +22,55 @@
       "扩展字段1", "扩展字段2", "扩展字段3"
     ];
 
-    Converter.read_file = function (file, callback) {
+    Converter.read_sf_file = function (file, callback) {
+      ext = file.name.split('.').pop();
+      if (ext == "xlsx" || ext == "xls") {
+        console.log("xlsx/xls");
+        var reader = new FileReader();
+        var name = file.name;
+        reader.onload = function (e) {
+          var data = e.target.result;
+          var workbook = XLSX.read(data, { type: 'binary' });
+          
+          var sheet_name_list = workbook.SheetNames;
+          sheet_name_list.forEach(function(y) { /* iterate through sheets */
+            var worksheet = workbook.Sheets[y];
+            // 转化为csv string
+            var csv_string = XLSX.utils.sheet_to_csv(worksheet);
+            Papa.parse(csv_string, {
+              encoding: 'gb18030',
+              complete: function(obj) {
+                Converter.sf_to_yz_csv(obj.data)
+                if (callback != undefined) {
+                  callback();
+                }
+              },
+              error: function(error) {
+                console.log(error);
+              }
+            });
+          });
+        };
+        reader.readAsBinaryString(file);
+      }
+    };
+
+    Converter.sf_to_yz_csv = function (data_array) {
+      csv_string = ""
+      csv_string = csv_string.concat("订单ID,物流公司,物流单号\n");
+      index = 0;
+      data_array.forEach(function(cells, i, array) {
+        index += 1;
+        if (index > 1 && cells.length > 10) {
+          csv_string = csv_string.concat(cells[0] + ",顺丰速运," + cells[1]+"\n");
+        }
+      });
+      // console.log(csv_string);
+      var blob = new Blob([csv_string], {type: "text/csv;charset=gb18030"});
+      saveAs(blob, "标记发货-" + (new Date()).getTime() + ".csv");
+    }
+
+    Converter.read_yz_file = function (file, callback) {
       ext = file.name.split('.').pop();
       if (ext == "xlsx" || ext == "xls") {
         console.log("xlsx/xls");
@@ -188,7 +236,7 @@
       wb.SheetNames.push('SF');
       wb.Sheets['SF'] = ws;
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
-      saveAs(new Blob([Converter.s2ab(wbout)],{type:"application/octet-stream"}), "顺丰单"+ (new Date()).getTime() +".xlsx")
+      saveAs(new Blob([Converter.s2ab(wbout)], { type: "application/octet-stream" }), "顺丰单" + (new Date()).getTime() + ".xlsx");
     }
 
     Converter.s2ab = function (s) {
