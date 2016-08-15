@@ -24,15 +24,32 @@
 
     Converter.read_file = function (file, callback) {
       ext = file.name.split('.').pop();
-      if (ext == "xlsx") {
-        console.log("xlsx");
+      if (ext == "xlsx" || ext == "xls") {
+        console.log("xlsx/xls");
         var reader = new FileReader();
         var name = file.name;
         reader.onload = function (e) {
           var data = e.target.result;
-          // console.log(data);
           var workbook = XLSX.read(data, { type: 'binary' });
-          // console.log(workbook);
+          
+          var sheet_name_list = workbook.SheetNames;
+          sheet_name_list.forEach(function(y) { /* iterate through sheets */
+            var worksheet = workbook.Sheets[y];
+            // 转化为csv string
+            var csv_string = XLSX.utils.sheet_to_csv(worksheet);
+            Papa.parse(csv_string, {
+              encoding: 'gb18030',
+              complete: function(obj) {
+                Converter.csv_to_sf(obj.data)
+                if (callback != undefined) {
+                  callback();
+                }
+              },
+              error: function(error) {
+                console.log(error);
+              }
+            });
+          });
         };
         reader.readAsBinaryString(file);
       }
@@ -52,11 +69,6 @@
           }
         });
       }
-    }
-
-    // xlsx 转化为 xlsx
-    Converter.xlsx_to_sf = function (file) {
-      
     }
     
     // csv 转化为 xlsx

@@ -38,7 +38,7 @@
       </h2>
       <div class="ui divider"></div>
       <h3>有赞订单 (转) 顺丰订单</h3>
-      <p>支持csv和xlsx格式</p>
+      <p>支持csv和xlsx/xls格式</p>
       <input type="file" style="display:none" id="select-file"></input>
       <div class="ui buttons">
         <a class="ui primary button" id="select-file-btn">
@@ -61,36 +61,14 @@
         $("#select-file").click();
       });
 
-      $("#select-file").on('change', function(e) {
-        file = this.files[0];
-        $("#select-file-btn").addClass('loading');
-        Converter.read_file(file, function() {
-          $("#select-file-btn").removeClass('loading');
-        })
-        // Papa.parse(file, {
-        //   complete: function(obj) {
-        //     // Converter.to_sf(obj.data)
-        //     $("#select-file-btn").removeClass('loading');
-        //   },
-        //   error: function(error) {
-        //     console.log(error);
-        //     $("#select-file-btn").removeClass('loading');
-        //   }
-        // });
-      });
-
-      $("#select-file").on("change", function(e){
+      $("#select-file").on('select', function(e) {
+        console.log('select...')
         // file = this.files[0];
-        // Papa.parse(file, {
-        //   complete: function(obj) {
-        //     // console.log(obj);
-        //     Converter.to_sf(obj.data)
-        //   },
-        //   error: function(error) {
-        //     console.log(error);
-        //   }
-        // });
-      })
+        // $("#select-file-btn").addClass('loading');
+        // Converter.read_file(file, function() {
+        //   $("#select-file-btn").removeClass('loading');
+        // })
+      });
     })
   </script>
 </html>
