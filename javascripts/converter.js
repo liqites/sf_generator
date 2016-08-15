@@ -30,15 +30,9 @@
         var name = file.name;
         reader.onload = function (e) {
           var data = e.target.result;
-<<<<<<< HEAD
           // console.log(data);
           var workbook = XLSX.read(data, { type: 'binary' });
           // console.log(workbook);
-=======
-          console.log(data);
-          var workbook = XLSX.read(data, { type: 'binary' });
-          console.log(workbook);
->>>>>>> 01d3b06f6bf3f557a50bcb3d4dddb1ebc0908acc
         };
         reader.readAsBinaryString(file);
       }
@@ -91,6 +85,7 @@
             order = new Object();
             order.order_id = order_id;
             order.user_name = user_name;
+            order.user_phone = user_phone;
             order.user_address = user_address;
             order.create_time = create_time;
 
