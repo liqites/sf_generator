@@ -66,7 +66,7 @@
         }
       });
       // console.log(csv_string);
-      var blob = new Blob([csv_string], {type: "text/csv;charset=gb18030"});
+      var blob = new Blob([csv_string], {type: "text/csv;charset=utf8"});
       saveAs(blob, "标记发货-" + (new Date()).getTime() + ".csv");
     }
 
