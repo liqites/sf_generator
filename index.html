@@ -61,13 +61,13 @@
         $("#select-file").click();
       });
 
-      $("#select-file").on('select', function(e) {
-        console.log('select...')
-        // file = this.files[0];
-        // $("#select-file-btn").addClass('loading');
-        // Converter.read_file(file, function() {
-        //   $("#select-file-btn").removeClass('loading');
-        // })
+      $("#select-file").on('change', function(e) {
+        // console.log('select...')
+        file = this.files[0];
+        $("#select-file-btn").addClass('loading');
+        Converter.read_file(file, function() {
+          $("#select-file-btn").removeClass('loading');
+        })
       });
     })
   </script>
