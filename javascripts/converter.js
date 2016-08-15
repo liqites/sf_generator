@@ -21,6 +21,42 @@
       "派件短信通知(SMS)", "寄方客户备注", "长(cm)", "宽(cm)", "高(cm)",
       "扩展字段1", "扩展字段2", "扩展字段3"
     ];
+    Converter.sf_status = [
+      "运输中", "派送失败", "已收件", "未收件"
+    ]
+
+    Converter.xlsx_to_csv = function (file, callback) {
+      var reader = new FileReader();
+      var name = file.name;
+      reader.onload = function (e) {
+        var data = e.target.result;
+        var workbook = XLSX.read(data, { type: 'binary' });
+        
+        var sheet_name_list = workbook.SheetNames;
+        sheet_name_list.forEach(function(y) { /* iterate through sheets */
+          var worksheet = workbook.Sheets[y];
+          // 转化为csv string
+          var csv_string = XLSX.utils.sheet_to_csv(worksheet);
+          Papa.parse(csv_string, {
+            encoding: 'gb18030',
+            complete: function (obj) {
+              if (callback) {
+                callback(obj.data);
+              }
+              // array = obj.data;
+              // Converter.sf_to_yz_csv(obj.data)
+              // if (callback != undefined) {
+              //   callback();
+              // }
+            },
+            error: function(error) {
+              console.log(error);
+            }
+          });
+        });
+      };
+      reader.readAsBinaryString(file);
+    }
 
     Converter.read_sf_file = function (file, callback) {
       ext = file.name.split('.').pop();
@@ -66,7 +102,7 @@
         }
       });
       // console.log(csv_string);
-      var blob = new Blob([csv_string], {type: "text/csv;charset=utf8"});
+      var blob = new Blob([csv_string], {type: "text/csv;charset=utf-8"});
       saveAs(blob, "标记发货-" + (new Date()).getTime() + ".csv");
     }
 

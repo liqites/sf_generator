@@ -61,11 +61,69 @@
       <div class="ui buttons">
         <a href="templates/顺丰导出.xls" class="ui button">Excel模版</a>
       </div>
+
+      <div class="ui divider"></div>
+      
+      <h3>数据验证</h3>
+      <input type="file" id="select-v1"></input>
+      <input type="file" id="select-v2"></input>
+      <a class="ui button" id="validate">OK</a>
     </div>
   </body>
   
   <script type="text/javascript">
     $(document).ready(function(){
+      $("#validate").on("click", function(e) {
+        file1 = $("#select-v1")[0].files[0];
+        file2 = $("#select-v2")[0].files[0];
+
+        var sf_array = [];
+        var yz_array = [];
+        csv_string = ""
+        csv_string = csv_string.concat("订单ID,物流公司,物流单号\n");
+
+        h = new Object();
+
+        Converter.xlsx_to_csv(file1, function(data) {
+          sf_array = data;
+
+          Converter.xlsx_to_csv(file2, function(data) {
+            yz_array = data;
+            
+            // 检查
+            sf_array.forEach(function(s_item, s_i, s_array) {
+              if(s_i > 0 && s_item[0].length > 0) {
+                yz_array.forEach(function(item, i, array){
+                  if(!h.hasOwnProperty(s_item[0])) {
+                    if(i > 0) {
+                      if(item[0].includes(s_item[0])) {
+                        r = item[28] == s_item[8];
+                        //if(r) {
+                          csv_string = csv_string.concat(item[0].trim()+"," + "顺丰速运" + "," + s_item[1] + "\n");
+                          h[s_item[0]] = true;
+                        //}
+                      }
+                    }
+                  }  
+                });
+              }
+              // console.log(item);
+            });
+
+            //
+            // console.log(csv_string);
+             var blob = new Blob([csv_string], {type: "text/csv;charset=utf-8"});
+             saveAs(blob, "修正标记发货-" + (new Date()).getTime() + ".csv");
+          });
+        });
+
+        // Converter.xlsx_to_csv(file2, function(data) {
+        //   yz_array = data;
+        // });
+
+        
+      });
+
       $("#select-sf-btn").on('click', function(e) {
         $("#select-sf-file").click();
       });
