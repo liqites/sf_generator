@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-dark.css">
     <link rel="stylesheet" href="stylesheets/semantic.css">
+    <link rel="stylesheet" href="stylesheets/sweetalert.css">
     <script src="https://lib.sinaapp.com/js/jquery/1.10.2/jquery-1.10.2.min.js"></script>
     <script src="javascripts/respond.js"></script>
     <script src="javascripts/semantic.min.js"></script>
@@ -16,6 +17,7 @@
     <script src="javascripts/blob.js"></script>
     <script src="javascripts/filesaver.js"></script>
     <script src="javascripts/converter.js"></script>
+    <script src="javascripts/sweetalert.min.js"></script>
     
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -63,19 +65,43 @@
       </div>
 
       <div class="ui divider"></div>
-      
+
+      <input type="file" style="display: none" id="select-v1"></input>
+      <input type="file" style="display: none" id="select-v2"></input>
       <h3>数据验证</h3>
-      <input type="file" id="select-v1"></input>
-      <input type="file" id="select-v2"></input>
-      <a class="ui button" id="validate">OK</a>
+      <p>用于验证错误的顺丰订单号，并生成新的标记发货单</p>
+      <div class="ui buttons">
+        <a class="ui primary button" id="select-v1-btn">选择顺丰导出单</a>
+        <a class="ui primary button" id="select-v2-btn">选择有赞导出单</a>
+      </div>
+      
+      <a class="ui button" id="validate">生成标价发货单</a>
     </div>
   </body>
   
   <script type="text/javascript">
     $(document).ready(function(){
+      $("#select-v1-btn").on('click', function(e) {
+        $("#select-v1").click();
+      })
+
+      $("#select-v2-btn").on('click', function(e) {
+        $("#select-v2").click();
+      })
+
       $("#validate").on("click", function(e) {
         file1 = $("#select-v1")[0].files[0];
         file2 = $("#select-v2")[0].files[0];
+
+        if(file1 == undefined) {
+          sweetAlert("文件不全", "没有选择顺丰导出单!", "error");
+          return;
+        }
+
+        if(file2 == undefined) {
+          sweetAlert("文件不全", "没有选择有赞导出单!", "error");
+          return;
+        }
 
         var sf_array = [];
         var yz_array = [];
