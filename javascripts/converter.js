@@ -178,6 +178,14 @@
       this.order_list = new Object();
       data_array.forEach(function(cells, i, array) {
         index += 1;
+
+        // 检查列名
+        if (index == 1) {
+          if (cells[13].trim() != "SKU") {
+            sweetAlert("文件格式错误", "你选择的文件第14列不是SKU，会导致转化出错，请检查并修改为正确的格式后重新选择！", "error");
+            // return;
+          }  
+        }
         if(index > 1 && cells.length > 10) {
           order_id = cells[0].trim();
 
