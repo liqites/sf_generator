@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>SF generator by liqites</title>
@@ -26,166 +27,178 @@
     <link rel="stylesheet" href="stylesheets/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="ui top fixed inverted menu">
     </div>
     <div class="ui container" style="margin-top: 50px">
-      <h2 class="ui header">
-        <img src="images/plugin.png">
-        <div class="content" >
-          工具
-          <div class="sub header">订单转化</div>
+        <h2 class="ui header">
+            <img src="images/plugin.png">
+            <div class="content">
+                工具
+                <div class="sub header">订单转化</div>
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <h3>有赞订单 (转) 顺丰订单</h3>
+        <p>支持csv和xlsx/xls格式，选择的文件应该符合下面的模版，点击灰色按钮下载查看</p>
+        <input type="file" style="display:none" id="select-yz-file"></input>
+        <div class="ui buttons">
+            <a class="ui primary button" id="select-yz-btn">
+          选择文件
+        </a>
         </div>
-      </h2>
-      <div class="ui divider"></div>
-      <h3>有赞订单 (转) 顺丰订单</h3>
-      <p>支持csv和xlsx/xls格式，选择的文件应该符合下面的模版，点击灰色按钮下载查看</p>
-      <input type="file" style="display:none" id="select-yz-file"></input>
-      <div class="ui buttons">
-        <a class="ui primary button" id="select-yz-btn">
+        <div class="ui buttons">
+            <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.csv" class="ui button">CSV模版</a>
+            <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.xls" class="ui button">Excel模版</a>
+        </div>
+        <div class="ui divider"></div>
+        <h3>顺丰订单 (转) 有赞标记发货</h3>
+        <p>支持xlsx/xls格式，选择的文件应该符合下面的模版，点击灰色按钮下载查看</p>
+        <input type="file" style="display:none" id="select-sf-file"></input>
+        <div class="ui buttons">
+            <a class="ui primary button" id="select-sf-btn">
           选择文件
         </a>
-      </div>
-      <div class="ui buttons">
-        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.csv" class="ui button">CSV模版</a>
-        <a href="templates/%E6%9C%89%E8%B5%9E%E6%A8%A1%E7%89%88.xls" class="ui button">Excel模版</a>
-      </div>
-      <div class="ui divider"></div>
-      <h3>顺丰订单 (转) 有赞标记发货</h3>
-      <p>支持xlsx/xls格式，选择的文件应该符合下面的模版，点击灰色按钮下载查看</p>
-      <input type="file" style="display:none" id="select-sf-file"></input>
-      <div class="ui buttons">
-        <a class="ui primary button" id="select-sf-btn">
-          选择文件
-        </a>
-      </div>
-      <div class="ui buttons">
-        <a href="templates/顺丰导出.xls" class="ui button">Excel模版</a>
-      </div>
+        </div>
+        <div class="ui buttons">
+            <a href="templates/顺丰导出.xls" class="ui button">Excel模版</a>
+        </div>
 
-      <div class="ui divider"></div>
+        <div class="ui divider"></div>
 
-      <input type="file" style="display: none" id="select-v1"></input>
-      <input type="file" style="display: none" id="select-v2"></input>
-      <h3>数据验证</h3>
-      <p>用于验证错误的顺丰订单号，并生成新的标记发货单</p>
-      <div class="ui buttons">
-        <a class="ui primary button" id="select-v1-btn">选择顺丰导出单</a>
-        <a class="ui primary button" id="select-v2-btn">选择有赞导出单</a>
-      </div>
+        <input type="file" style="display: none" id="select-v1"></input>
+        <input type="file" style="display: none" id="select-v2"></input>
+        <h3>数据验证</h3>
+        <p>用于验证错误的顺丰订单号，并生成新的标记发货单</p>
+        <div class="ui buttons">
+            <a class="ui primary button" id="select-v1-btn">选择顺丰导出单</a>
+            <a class="ui primary button" id="select-v2-btn">选择有赞导出单</a>
+        </div>
 
-      <a class="ui button" id="validate">生成标价发货单</a>
+        <a class="ui button" id="validate">生成标价发货单</a>
     </div>
-  </body>
+</body>
 
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-83593915-1', 'auto');
     ga('send', 'pageview');
+</script>
 
-  </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#select-v1-btn").on('click', function(e) {
+            $("#select-v1").click();
+        })
 
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $("#select-v1-btn").on('click', function(e) {
-        $("#select-v1").click();
-      })
+        $("#select-v2-btn").on('click', function(e) {
+            $("#select-v2").click();
+        })
 
-      $("#select-v2-btn").on('click', function(e) {
-        $("#select-v2").click();
-      })
+        $("#validate").on("click", function(e) {
+            file1 = $("#select-v1")[0].files[0];
+            file2 = $("#select-v2")[0].files[0];
 
-      $("#validate").on("click", function(e) {
-        file1 = $("#select-v1")[0].files[0];
-        file2 = $("#select-v2")[0].files[0];
+            if (file1 == undefined) {
+                sweetAlert("文件不全", "没有选择顺丰导出单!", "error");
+                return;
+            }
 
-        if(file1 == undefined) {
-          sweetAlert("文件不全", "没有选择顺丰导出单!", "error");
-          return;
-        }
+            if (file2 == undefined) {
+                sweetAlert("文件不全", "没有选择有赞导出单!", "error");
+                return;
+            }
 
-        if(file2 == undefined) {
-          sweetAlert("文件不全", "没有选择有赞导出单!", "error");
-          return;
-        }
+            var sf_array = [];
+            var yz_array = [];
+            csv_string = ""
+            csv_string = csv_string.concat("订单ID,物流公司,物流单号\n");
 
-        var sf_array = [];
-        var yz_array = [];
-        csv_string = ""
-        csv_string = csv_string.concat("订单ID,物流公司,物流单号\n");
+            h = new Object();
 
-        h = new Object();
+            Converter.xlsx_to_csv(file1, function(data) {
+                sf_array = data;
 
-        Converter.xlsx_to_csv(file1, function(data) {
-          sf_array = data;
+                Converter.xlsx_to_csv(file2, function(data) {
+                    yz_array = data;
 
-          Converter.xlsx_to_csv(file2, function(data) {
-            yz_array = data;
+                    // 检查
+                    sf_array.forEach(function(s_item, s_i, s_array) {
+                        if (s_i > 0 && s_item[0].length > 0) {
+                            yz_array.forEach(function(item, i, array) {
+                                if (!h.hasOwnProperty(s_item[0])) {
+                                    if (i > 0) {
+                                        if (item[0].includes(s_item[0])) {
+                                            r = item[28] == s_item[8];
+                                            //if(r) {
+                                            csv_string = csv_string.concat(item[0].trim() + "," + "顺丰速运" + "," + s_item[1] + "\n");
+                                            h[s_item[0]] = true;
+                                            //}
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        // console.log(item);
+                    });
 
-            // 检查
-            sf_array.forEach(function(s_item, s_i, s_array) {
-              if(s_i > 0 && s_item[0].length > 0) {
-                yz_array.forEach(function(item, i, array){
-                  if(!h.hasOwnProperty(s_item[0])) {
-                    if(i > 0) {
-                      if(item[0].includes(s_item[0])) {
-                        r = item[28] == s_item[8];
-                        //if(r) {
-                          csv_string = csv_string.concat(item[0].trim()+"," + "顺丰速运" + "," + s_item[1] + "\n");
-                          h[s_item[0]] = true;
-                        //}
-                      }
-                    }
-                  }
+                    //
+                    // console.log(csv_string);
+                    var blob = new Blob([csv_string], {
+                        type: "text/csv;charset=utf-8"
+                    });
+                    saveAs(blob, "修正标记发货-" + (new Date()).getTime() + ".csv");
                 });
-              }
-              // console.log(item);
             });
 
-            //
-            // console.log(csv_string);
-             var blob = new Blob([csv_string], {type: "text/csv;charset=utf-8"});
-             saveAs(blob, "修正标记发货-" + (new Date()).getTime() + ".csv");
-          });
+            // Converter.xlsx_to_csv(file2, function(data) {
+            //   yz_array = data;
+            // });
+
+
         });
 
-        // Converter.xlsx_to_csv(file2, function(data) {
-        //   yz_array = data;
-        // });
+        $("#select-sf-btn").on('click', function(e) {
+            $("#select-sf-file").click();
+        });
 
+        $("#select-sf-file").on('change', function(e) {
+            // console.log('select...')
+            file = this.files[0];
+            $("#select-sf-btn").addClass('loading');
+            Converter.read_sf_file(file, function() {
+                $("#select-sf-btn").removeClass('loading');
+            })
+        });
 
-      });
+        // 选择有赞按钮
+        $("#select-yz-btn").on('click', function(e) {
+            $("#select-yz-file").click();
+        });
 
-      $("#select-sf-btn").on('click', function(e) {
-        $("#select-sf-file").click();
-      });
-
-      $("#select-sf-file").on('change', function(e) {
-        // console.log('select...')
-        file = this.files[0];
-        $("#select-sf-btn").addClass('loading');
-        Converter.read_sf_file(file, function() {
-          $("#select-sf-btn").removeClass('loading');
-        })
-      });
-
-      $("#select-yz-btn").on('click', function(e) {
-        $("#select-yz-file").click();
-      });
-
-      $("#select-yz-file").on('change', function(e) {
-        // console.log('select...')
-        file = this.files[0];
-        $("#select-yz-btn").addClass('loading');
-        Converter.read_yz_file(file, function() {
-          $("#select-yz-btn").removeClass('loading');
-        })
-      });
+        // 选择有赞文件
+        $("#select-yz-file").on('change', function(e) {
+            // console.log('select...')
+            file = this.files[0];
+            $("#select-yz-btn").addClass('loading');
+            Converter.read_yz_file(file, function() {
+                $("#select-yz-btn").removeClass('loading');
+            })
+        });
     })
-  </script>
+</script>
+
 </html>
